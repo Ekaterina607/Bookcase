@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+
+{% block content %}
+<form action="" method="post">
+    <div class="form-group">
+        {{ form.hidden_tag() }}
+        {{ form.csrf_token }}
+        <p>
+        {{ form.minimum.label }}<br>
+        {{ form.minimum(class="form-control") }}<br>
+        {% for error in form.minimum.errors %}
+            <p class="alert alert-danger" role="alert">
+                {{ error }}
+            </p>
+        {% endfor %}
+        </p>
+        <p>
+        {{ form.maximum.label }}<br>
+    {{ form.maximum(class="form-control") }}<br>
+    {% for error in form.maximum.errors %}
+        <p class="alert alert-danger" role="alert">
+            {{ error }}
+        </p>
+    {% endfor %}
+        <h3>{{ message }}</h3>
+        <p>{{ form.submit(type="submit", class="btn btn-primary") }}</p>
+        {{message}}
+        </p>
+    </div>>
+</form>
+{%endblock%}

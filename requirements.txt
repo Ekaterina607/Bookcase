@@ -1,0 +1,11 @@
+flask
+sqlalchemy
+discord
+bs4
+wikipedia-api
+wikipedia
+requests
+flask-login
+sqlalchemy-serializer
+flask-wtf
+gunicorn

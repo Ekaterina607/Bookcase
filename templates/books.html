@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+
+
+{% block content %}
+{% if err %} <h3>{{ err }}</h3>
+{% else %}
+ <h1>Library</h1>
+ {% for book in books%}
+ <h2>Book №{{books.index(book) + 1}}</h2>
+    <div class="card border-success mb-3" style="max-width: 540px;">
+      <div class="row no-gutters">
+        <div class="col-md-4">
+          <img src="/static/img/book{{book.id}}.jpg" class="card-img" alt="Изображение книги">
+         </div>
+          <div class="col-md-8">
+              <div class="bg-secondary text-white card-header" ><h5>{{book.title}}</h5></div>
+              <div class="card-body">
+                <h5 class="card-text">{{names[loop.index0]}} {{surnames[loop.index0]}}</h5>
+                <h5 class="card-text">Жанр: {{genres[loop.index0]}}</h5>
+                <h5 class="card-text">Дата издания: {{book.date}}</h5>
+                <h5 class="card-text">Цена: {{book.price}}</h5>
+                <a href="{{ extra_info[loop.index0] }}" class="btn btn-secondary">Подробнее</a>
+                  {% if current_user.is_authenticated and current_user.id == 1 %}
+                    {% endif %}
+                {% if current_user.is_authenticated and current_user.id != 1 %}
+                  <a href="/books_buy/{{ book.id }}" class="btn btn-success">Купить</a>
+                  <a href="/books_review/{{ book.id }}" class="btn btn-info">Отзыв</a>
+                  <a href="/books_review_show/{{ book.id }}" class="btn btn-light">Все отзывы</a>
+                  {% endif %}
+              </div>
+        </div>
+    </div>
+    </div>
+{% endfor %}
+{% endif %}
+{%endblock%}

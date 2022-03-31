@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+
+
+{% block content %}
+{% if message %}
+<h3>{{ message }}</h3>
+<a href="/books" class="btn btn-primary">Продолжить покупки</a>
+{% else %}
+ <h1>Library</h1>
+ {% for book in books%}
+ <h2>Book №{{books.index(book) + 1}}</h2>
+    <div class="card border-success mb-3" style="max-width: 540px;">
+      <div class="row no-gutters">
+        <div class="col-md-4">
+          <img src="/static/img/book{{book.id}}.jpg" class="card-img" alt="Изображение книги">
+         </div>
+          <div class="col-md-8">
+              <div class="bg-secondary text-white card-header" ><h5>{{book.title}}</h5></div>
+              <div class="card-body">
+                <h5 class="card-text">{{names[loop.index0]}} {{surnames[loop.index0]}}</h5>
+                <h5 class="card-text">Цена: {{book.price}}</h5>
+                  {% if current_user.is_authenticated %}
+                <a href="/basket_delete/{{ book.id }}" class="btn btn-danger">Удалить</a>
+                    {% endif %}
+              </div>
+        </div>
+    </div>
+    </div>
+{% endfor %}
+{% endif %}
+{%endblock%}

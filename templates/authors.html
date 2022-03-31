@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+
+
+{% block content %}
+{% if err %} <h3>{{ err }}</h3>
+{% else %}
+ <h1>Library</h1>
+ {% for author in authors%}
+ <h2>Author №{{authors.index(author) + 1}}</h2>
+    <div class="card border-success mb-3" style="max-width: 20rem;">
+              <div class="bg-secondary text-white card-header" ><h5>{{author.name}} {{author.surname}}</h5></div>
+              <div class="card-body">
+                <h5 class="card-text">Годы жизни: {{author.years}}</h5>
+                <h5 class="card-text">Написанные книги: {{author.list_of_books}}</h5>
+                <a href="{{ extra_info[loop.index0] }}" class="btn btn-secondary">Подробнее</a>
+        </div>
+    </div>
+{% endfor %}
+{% endif %}
+{%endblock%}

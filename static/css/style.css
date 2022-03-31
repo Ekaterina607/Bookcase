@@ -1,0 +1,44 @@
+h4 {
+    color: #cccccc;
+    padding: 20px;
+}
+
+h1 {
+    color: #ffffff;
+}
+
+body
+{
+    background-image: url('bg2.jpg');
+}
+
+h2
+{
+   color: #ffe4e1;
+}
+
+h3
+{
+   color: #ffe4e1;
+}
+
+
+p
+{
+   color: #ffe4e1;
+}
+.center {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  width: 50%;
+}
+
+form.login_form {
+    margin-left: auto;
+    margin-right: auto;
+    max-width: 750px;
+    border: 1px solid gray;
+    border-radius: 5px;
+    padding: 10px;
+}
