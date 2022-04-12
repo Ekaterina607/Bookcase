@@ -244,7 +244,7 @@ def edit_authors(id):
     return render_template('addgenre.html', title='Редактирование жанров', form=form)
 
 
-@app.route('/books')  # не работает
+@app.route('/books')
 def books():
     session = db_session.create_session()
     books = session.query(Books).all()
@@ -262,6 +262,80 @@ def books():
 
     return render_template('books.html', title='Все книги', books=books, names=names, surnames=surnames,
                            extra_info=extra_info, genres=genres)
+
+
+@app.route('/basket_delete/<int:number>')
+@login_required
+def basket_delete(number):
+    session = db_session.create_session()
+    user = session.query(User).get(current_user.id)
+    books_id = user.bought
+    books_id = books_id.strip(', ').split(',')
+    books_id.remove(str(number))
+    user.bought = ', '.join(books_id)
+    session.commit()
+    return redirect('/basket')
+
+
+@app.route('/books_buy/<int:book_id>')
+@login_required
+def books_buy(book_id):
+    session = db_session.create_session()
+    user = session.query(User).get(current_user.id)
+    if not user.bought:
+        user.bought = ''
+    user.bought += str(book_id) + ', '
+    session.commit()
+    return redirect('/books')
+
+
+@app.route('/books_review/<int:book_id>', methods=["GET", "POST"])  # оставить отзыв
+@login_required
+def books_review(book_id):
+    form = BookReview()
+    session = db_session.create_session()
+    book = session.query(Books).get(book_id)
+    if form.validate_on_submit():
+        review = form.review.data
+        if not book.review:
+            book.review = ""
+        book.review += f"{review}+"
+        session.commit()
+        return redirect('/books')
+
+    return render_template('books_review.html', title='Оставить отзыв', book=book, form=form)
+
+
+@app.route('/books_review_show/<int:book_id>', methods=["GET", "POST"])
+@login_required
+def books_review_show(book_id):
+    session = db_session.create_session()
+    book = session.query(Books).get(book_id)
+    if book.review:
+        reviews = book.review.strip('+').split('+')
+        return render_template('books_review_show.html', title='Все отзывы о книге', book=book, reviews=reviews)
+    return render_template('books_review_show.html', title='Все отзывы о книге',
+                           book=book, err='Отзывов к этой книге пока нет.')
+
+
+@app.route('/basket')
+@login_required
+def basket():
+    session = db_session.create_session()
+    user = session.query(User).get(current_user.id)
+    books_id = user.bought
+    names, surnames, books = [], [], []
+    cost = 0
+    if books_id:
+        for id in books_id.strip(', ').split(','):
+            book = session.query(Books).filter(Books.id == id).first()
+            author = session.query(Author).filter(Author.id == book.author_id).first()
+            names.append(author.name)
+            surnames.append(author.surname)
+            books.append(book)
+            cost += book.price
+        return render_template('basket.html', title='Корзина', books=books, names=names, surnames=surnames, cost=cost)
+    return render_template('basket.html', title='Корзина', message='Ваша корзина пуста')
 
 
 def main():
